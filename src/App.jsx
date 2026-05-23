@@ -40,17 +40,79 @@ export default function App() {
     localStorage.setItem('recipe_master_theme', theme);
   }, [theme]);
 
+  // =========================================================================
+  // Google Analytics (GA4) Page View Tracking
+  // =========================================================================
+  useEffect(() => {
+    if (window.gtag) {
+      let pagePath = '/explore';
+      let pageTitle = 'Explore Recipes';
+
+      if (selectedRecipeId) {
+        const currentRecipe = recipes.find(r => r.id === selectedRecipeId);
+        const title = currentRecipe ? currentRecipe.title : 'Recipe Details';
+        pagePath = `/recipe/${selectedRecipeId}`;
+        pageTitle = `Recipe: ${title}`;
+      } else {
+        switch (activeTab) {
+          case 'matcher':
+            pagePath = '/matcher';
+            pageTitle = 'Fridge Matcher';
+            break;
+          case 'add-recipe':
+            pagePath = '/add-recipe';
+            pageTitle = 'Add New Recipe';
+            break;
+          case 'explore':
+          default:
+            pagePath = '/explore';
+            pageTitle = 'Explore Recipes';
+            break;
+        }
+      }
+
+      // Log virtual pageview to Google Analytics
+      window.gtag('config', 'G-N35F91XVML', {
+        page_path: pagePath,
+        page_title: pageTitle
+      });
+    }
+  }, [activeTab, selectedRecipeId, recipes]);
+
   const toggleTheme = () => {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
 
-  // Add Recipe Callback
+  // Add Recipe Callback (Logs Success Event)
   const handleAddRecipe = (newRecipe) => {
+    if (window.gtag) {
+      window.gtag('event', 'add_recipe_success', {
+        event_category: 'recipe_creation',
+        recipe_id: newRecipe.id,
+        recipe_title: newRecipe.title,
+        country: newRecipe.country,
+        state: newRecipe.state || 'Global',
+        spice_level: newRecipe.spiceLevel,
+        cook_time: newRecipe.cookTime,
+        stars: newRecipe.stars
+      });
+    }
     setRecipes(prev => [newRecipe, ...prev]);
   };
 
-  // Add Review Callback (updates recipe stats in memory)
+  // Add Review Callback (Logs Review Submission)
   const handleAddReview = (recipeId, review) => {
+    const currentRecipe = recipes.find(r => r.id === recipeId);
+    if (currentRecipe && window.gtag) {
+      window.gtag('event', 'submit_review', {
+        event_category: 'reviews',
+        recipe_id: recipeId,
+        recipe_title: currentRecipe.title,
+        rating: review.rating,
+        author: review.author
+      });
+    }
+
     setRecipes(prevRecipes => {
       return prevRecipes.map(recipe => {
         if (recipe.id === recipeId) {
@@ -71,14 +133,39 @@ export default function App() {
     });
   };
 
-  // Find selected recipe object
-  const selectedRecipe = recipes.find(r => r.id === selectedRecipeId);
+  // Click handler to open recipe detail (Logs Select Content Clicks)
+  const handleViewRecipeDetails = (id) => {
+    const clickedRecipe = recipes.find(r => r.id === id);
+    if (clickedRecipe && window.gtag) {
+      window.gtag('event', 'select_content', {
+        content_type: 'recipe',
+        item_id: clickedRecipe.id,
+        item_name: clickedRecipe.title,
+        country: clickedRecipe.country,
+        state: clickedRecipe.state || 'Global',
+        spice_level: clickedRecipe.spiceLevel,
+        cook_time: clickedRecipe.cookTime,
+        stars: clickedRecipe.stars
+      });
+    }
+    setSelectedRecipeId(id);
+  };
 
-  // Navigation interceptor to reset detailed view when switching tabs
+  // Navigation interceptor to reset detailed view and track start clicks
   const handleSetActiveTab = (tab) => {
     setSelectedRecipeId(null); // Close detailed view
     setActiveTab(tab);
+
+    if (tab === 'add-recipe' && window.gtag) {
+      window.gtag('event', 'add_recipe_start', {
+        event_category: 'recipe_creation',
+        event_label: 'User clicked add recipe navigation tab'
+      });
+    }
   };
+
+  // Find selected recipe object
+  const selectedRecipe = recipes.find(r => r.id === selectedRecipeId);
 
   // Main Render View Router
   const renderContent = () => {
@@ -97,7 +184,7 @@ export default function App() {
         return (
           <IngredientMatcher 
             recipes={recipes} 
-            onViewRecipe={(id) => setSelectedRecipeId(id)}
+            onViewRecipe={handleViewRecipeDetails}
           />
         );
       case 'add-recipe':
@@ -112,7 +199,7 @@ export default function App() {
         return (
           <ExploreRecipes 
             recipes={recipes} 
-            onViewRecipe={(id) => setSelectedRecipeId(id)}
+            onViewRecipe={handleViewRecipeDetails}
           />
         );
     }

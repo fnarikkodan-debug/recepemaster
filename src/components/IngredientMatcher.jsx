@@ -74,6 +74,13 @@ export default function IngredientMatcher({ recipes, onViewRecipe }) {
 
   // Handle Text File Upload
   const processTextFile = (file) => {
+    if (window.gtag) {
+      window.gtag('event', 'fridge_list_upload', {
+        event_category: 'fridge_matcher',
+        file_name: file.name
+      });
+    }
+
     const reader = new FileReader();
     reader.onload = (e) => {
       const text = e.target.result;
@@ -147,6 +154,12 @@ export default function IngredientMatcher({ recipes, onViewRecipe }) {
   };
 
   const triggerScan = (file) => {
+    if (window.gtag) {
+      window.gtag('event', 'fridge_image_scan_start', {
+        event_category: 'fridge_matcher'
+      });
+    }
+
     const url = URL.createObjectURL(file);
     setScanImage(url);
     setScanning(true);
@@ -195,6 +208,14 @@ export default function IngredientMatcher({ recipes, onViewRecipe }) {
     // Select random subset of 4-6 ingredients to simulate real AI scan
     const shuffled = [...mockExtractions].sort(() => 0.5 - Math.random());
     const selected = shuffled.slice(0, Math.floor(Math.random() * 3) + 4);
+
+    if (window.gtag) {
+      window.gtag('event', 'fridge_image_scan_success', {
+        event_category: 'fridge_matcher',
+        extracted_count: selected.length,
+        extracted_items: selected.join(', ')
+      });
+    }
 
     const merged = [...selectedIngredients];
     selected.forEach(item => {
