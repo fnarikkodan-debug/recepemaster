@@ -1,0 +1,345 @@
+/* RecipeMaster - Pantone Color of the Year 2025: Mocha Mousse (#A47864) Design System */
+
+:root {
+  /* Fonts */
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Animation Durations */
+  --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Shadows & Gradients */
+  --shadow-sm: 0 2px 8px rgba(27, 19, 16, 0.04);
+  --shadow-md: 0 10px 30px rgba(27, 19, 16, 0.08);
+  --shadow-lg: 0 20px 50px rgba(27, 19, 16, 0.15);
+  
+  /* Pantone-Inspired Mocha Gradients */
+  --grad-primary: linear-gradient(135deg, #a47864 0%, #d4a373 100%); /* Mocha Mousse to Warm Caramel */
+  --grad-secondary: linear-gradient(135deg, #3d2a23 0%, #a47864 100%); /* Deep Espresso to Mocha Mousse */
+  --grad-accent: linear-gradient(135deg, #a47864 0%, #b58c79 50%, #cfa995 100%);
+  --grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.005) 100%);
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+
+  /* Theme: Dark (Default - Rich Velvet Espresso) */
+  --bg-app: #120c0a; /* Darkest Roasted Cocoa */
+  --bg-surface: #1b120f; /* Warm Cacao Gray */
+  --bg-card: rgba(27, 18, 15, 0.7);
+  --border-color: rgba(164, 120, 100, 0.15);
+  --border-hover: rgba(164, 120, 100, 0.35);
+  --text-primary: #fcfaf8; /* Soft Milk-Froth White */
+  --text-secondary: #d8ceca; /* Warm Silvered Cocoa */
+  --text-muted: #968680; /* Dried Clay */
+  --color-accent: #a47864; /* PANTONE 17-1230 Mocha Mousse */
+  --color-accent-hover: #b88d79;
+  --color-success: #8f9c7f; /* Earthy Sage Green */
+  --glass-blur: blur(24px);
+  --card-glow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  --glow-color: rgba(164, 120, 100, 0.15);
+
+  /* Spice Level Design System */
+  --spice-mild: #8f9c7f; /* Sage Green */
+  --spice-medium: #d4a373; /* Warm Caramel */
+  --spice-hot: #bd5d38; /* Rust Clay */
+  --spice-insane: #992313; /* Deep Crimson */
+}
+
+/* Light Theme Variables */
+:root[data-theme="light"] {
+  --bg-app: #fcfaf8; /* Soft Alabaster Cream */
+  --bg-surface: #f3ece6; /* Soft Frothy Latte */
+  --bg-card: rgba(255, 255, 255, 0.8);
+  --border-color: rgba(164, 120, 100, 0.12);
+  --border-hover: rgba(164, 120, 100, 0.28);
+  --text-primary: #2a1b15; /* Deep Espresso Charcoal */
+  --text-secondary: #5a4b44; /* Latte Brown */
+  --text-muted: #968882; /* Clay Grey */
+  --color-accent: #a47864;
+  --color-accent-hover: #8f634e;
+  --color-success: #657850; /* Darker Sage Green */
+  --card-glow: 0 12px 40px rgba(164, 120, 100, 0.06);
+  --grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
+  --glow-color: rgba(164, 120, 100, 0.08);
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* Custom Velvet Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-app);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(164, 120, 100, 0.2);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* Base Styles & Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* Grid & Layout Utilities */
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* Header & Banner */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(18, 12, 10, 0.7);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--border-color);
+  transition: background var(--transition-normal), border var(--transition-normal);
+}
+
+:root[data-theme="light"] .app-header {
+  background: rgba(252, 250, 248, 0.7);
+}
+
+/* Cards & Panels */
+.glass-panel {
+  background: var(--grad-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--card-glow);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  transition: all var(--transition-normal);
+}
+
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--card-glow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.glass-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-lg), 0 0 25px var(--glow-color);
+}
+
+/* Premium Buttons */
+.btn-primary {
+  background: var(--grad-primary);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all var(--transition-fast);
+  letter-spacing: 0.02em;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(164, 120, 100, 0.3);
+  filter: brightness(1.08);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: rgba(164, 120, 100, 0.1);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-full);
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all var(--transition-fast);
+}
+
+.btn-secondary:hover {
+  background: rgba(164, 120, 100, 0.18);
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.form-input, .form-select, .form-textarea {
+  background: rgba(27, 18, 15, 0.4);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+:root[data-theme="light"] .form-input, 
+:root[data-theme="light"] .form-select, 
+:root[data-theme="light"] .form-textarea {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(164, 120, 100, 0.25);
+  background: rgba(27, 18, 15, 0.6);
+}
+
+:root[data-theme="light"] .form-input:focus, 
+:root[data-theme="light"] .form-select:focus, 
+:root[data-theme="light"] .form-textarea:focus {
+  background: #ffffff;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseBorder {
+  0% { border-color: rgba(164, 120, 100, 0.2); }
+  50% { border-color: rgba(164, 120, 100, 0.6); }
+  100% { border-color: rgba(164, 120, 100, 0.2); }
+}
+
+.animate-fade {
+  animation: fadeIn var(--transition-normal) forwards;
+}
+
+.animate-slide {
+  animation: slideUp var(--transition-normal) forwards;
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+}
+
+.badge-mild { background: rgba(143, 156, 127, 0.12); color: #a4b394; border-color: rgba(143, 156, 127, 0.2); }
+.badge-medium { background: rgba(212, 163, 115, 0.12); color: #e6b88a; border-color: rgba(212, 163, 115, 0.2); }
+.badge-hot { background: rgba(189, 93, 56, 0.12); color: #d47e5b; border-color: rgba(189, 93, 56, 0.2); }
+.badge-insane { background: rgba(153, 35, 19, 0.12); color: #c4402f; border-color: rgba(153, 35, 19, 0.3); }
+
+:root[data-theme="light"] .badge-mild { color: #516040; }
+:root[data-theme="light"] .badge-medium { color: #9f7040; }
+:root[data-theme="light"] .badge-hot { color: #a24b27; }
+:root[data-theme="light"] .badge-insane { color: #801d11; }
+
+.badge-time { background: rgba(164, 120, 100, 0.08); color: var(--text-secondary); border-color: var(--border-color); }
+.badge-geo { background: rgba(212, 163, 115, 0.08); color: var(--color-accent); border-color: rgba(164, 120, 100, 0.2); }
+
+/* Decorative Background Blobs */
+.mocha-ambient {
+  position: absolute;
+  width: 50vw;
+  height: 50vw;
+  max-width: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(164, 120, 100, 0.05) 0%, rgba(164, 120, 100, 0) 70%);
+  pointer-events: none;
+  z-index: -10;
+}
+
+.ambient-1 { top: -10vw; right: -5vw; }
+.ambient-2 { bottom: -10vw; left: -10vw; background: radial-gradient(circle, rgba(212, 163, 115, 0.04) 0%, rgba(212, 163, 115, 0) 70%); }
