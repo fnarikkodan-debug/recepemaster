@@ -68,6 +68,14 @@ test.describe('RecipeMaster E2E Test Suite', () => {
     await expect(page.locator('h1:has-text("Authentic Cacio e Pepe")')).toBeVisible();
     await expect(page.locator('h2:has-text("Ingredients Checklist")')).toBeVisible();
 
+    // Verify JSON-LD structured data is dynamically injected
+    const jsonLdScript = page.locator('script#recipe-jsonld');
+    await expect(jsonLdScript).toBeAttached();
+    const content = await jsonLdScript.textContent();
+    const json = JSON.parse(content);
+    expect(json['@type']).toBe('Recipe');
+    expect(json['name']).toBe('Authentic Cacio e Pepe');
+
     // Get the first ingredient checkbox
     const firstCheckbox = page.locator('input[type="checkbox"]').first();
     await expect(firstCheckbox).not.toBeChecked();

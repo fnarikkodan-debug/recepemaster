@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPinIcon, SpiceIcon, ClockIcon, StarIcon } from './Icons';
 
 export default function RecipeDetail({ recipe, onBack, onAddReview }) {
@@ -10,6 +10,60 @@ export default function RecipeDetail({ recipe, onBack, onAddReview }) {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (!recipe) return;
+
+    // Create and inject JSON-LD structured data tag
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'recipe-jsonld';
+
+    const jsonLd = {
+      "@context": "https://schema.org/",
+      "@type": "Recipe",
+      "name": recipe.title,
+      "image": recipe.image || "https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&q=80&w=800",
+      "description": recipe.description,
+      "recipeYield": "4 servings",
+      "cookTime": `PT${recipe.cookTime}M`,
+      "recipeIngredient": recipe.ingredients,
+      "recipeInstructions": recipe.steps.map(step => ({
+        "@type": "HowToStep",
+        "text": `${step.title}: ${step.text}`
+      }))
+    };
+
+    if (recipe.reviews && recipe.reviews.length > 0) {
+      jsonLd.aggregateRating = {
+        "@type": "AggregateRating",
+        "ratingValue": recipe.stars,
+        "reviewCount": recipe.reviews.length
+      };
+      jsonLd.review = recipe.reviews.map(rev => ({
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": rev.rating
+        },
+        "author": {
+          "@type": "Person",
+          "name": rev.author
+        },
+        "reviewBody": rev.comment
+      }));
+    }
+
+    script.textContent = JSON.stringify(jsonLd);
+    document.head.appendChild(script);
+
+    return () => {
+      const oldScript = document.getElementById('recipe-jsonld');
+      if (oldScript) {
+        oldScript.remove();
+      }
+    };
+  }, [recipe]);
 
   if (!recipe) return <div style={{ color: 'var(--text-primary)', padding: '2rem' }}>Recipe not found.</div>;
 
